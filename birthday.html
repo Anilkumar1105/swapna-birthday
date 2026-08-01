@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, [Name]!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Quicksand:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plum:#2A1B3D;
+    --plum-deep:#1B1029;
+    --gold:#F4C95D;
+    --coral:#FF7A9C;
+    --mint:#8FE3D1;
+    --cream:#FBF3E7;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:linear-gradient(180deg, var(--plum-deep) 0%, var(--plum) 55%, #3A2450 100%);
+    color:var(--cream);
+    font-family:'Quicksand', sans-serif;
+    overflow-x:hidden;
+    min-height:100vh;
+    position:relative;
+  }
+
+  /* ---------- Ambient floating shapes ---------- */
+  .ambient{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:0;
+  }
+  .float-dot{
+    position:absolute;
+    border-radius:50%;
+    opacity:0.55;
+    animation:drift linear infinite;
+  }
+  @keyframes drift{
+    0%{ transform:translateY(0) translateX(0) rotate(0deg); }
+    100%{ transform:translateY(-120vh) translateX(20px) rotate(360deg); }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 20px;
+  }
+
+  .eyebrow{
+    font-family:'Space Mono', monospace;
+    letter-spacing:0.28em;
+    text-transform:uppercase;
+    font-size:0.72rem;
+    color:var(--mint);
+    margin-bottom:22px;
+    opacity:0;
+    animation:fadeUp 0.9s ease forwards 0.2s;
+  }
+
+  h1.headline{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(2.8rem, 8vw, 6rem);
+    line-height:1.02;
+    color:var(--cream);
+    opacity:0;
+    animation:fadeUp 1s ease forwards 0.4s;
+  }
+
+  h1.headline .name{
+    color:var(--gold);
+    font-style:italic;
+    font-weight:400;
+    display:block;
+  }
+
+  .subline{
+    margin-top:22px;
+    max-width:520px;
+    font-size:1.05rem;
+    line-height:1.6;
+    color:rgba(251,243,231,0.82);
+    opacity:0;
+    animation:fadeUp 1s ease forwards 0.65s;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(18px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .scroll-hint{
+    margin-top:56px;
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:rgba(251,243,231,0.5);
+    opacity:0;
+    animation:fadeUp 1s ease forwards 0.9s, bob 2.4s ease-in-out infinite 2s;
+  }
+  @keyframes bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(6px);}
+  }
+
+  /* ---------- Cake section (signature element) ---------- */
+  .cake-section{
+    position:relative;
+    z-index:1;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:60px 20px;
+    text-align:center;
+  }
+
+  .cake-label{
+    font-family:'Space Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--coral);
+    margin-bottom:14px;
+  }
+
+  .cake-title{
+    font-family:'Fraunces', serif;
+    font-size:clamp(1.8rem, 4.5vw, 2.6rem);
+    margin-bottom:8px;
+  }
+
+  .cake-hint{
+    font-size:0.92rem;
+    color:rgba(251,243,231,0.6);
+    margin-bottom:36px;
+  }
+
+  #cakeWrap{
+    cursor:pointer;
+    width:min(300px, 70vw);
+    transition:transform 0.2s ease;
+    user-select:none;
+  }
+  #cakeWrap:active{ transform:scale(0.97); }
+
+  .flame{
+    transform-origin:center bottom;
+    animation:flicker 1.6s ease-in-out infinite;
+    transition:opacity 0.5s ease, transform 0.5s ease;
+  }
+  @keyframes flicker{
+    0%,100%{ transform:scaleY(1) rotate(-1deg); }
+    50%{ transform:scaleY(1.12) rotate(2deg); }
+  }
+  .flame.out{
+    opacity:0;
+    transform:scaleY(0);
+  }
+
+  .smoke{
+    opacity:0;
+    transition:opacity 0.6s ease 0.3s;
+  }
+  .smoke.show{
+    opacity:0.5;
+    animation:riseSmoke 1.8s ease-out forwards;
+  }
+  @keyframes riseSmoke{
+    0%{ transform:translateY(0) scale(0.6); opacity:0.6;}
+    100%{ transform:translateY(-30px) scale(1.4); opacity:0;}
+  }
+
+  .wish-made{
+    margin-top:30px;
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--gold);
+    opacity:0;
+    transition:opacity 0.6s ease;
+  }
+  .wish-made.show{ opacity:1; }
+
+  /* ---------- Message section ---------- */
+  .message-section{
+    position:relative;
+    z-index:1;
+    max-width:640px;
+    margin:0 auto;
+    padding:80px 24px 140px;
+    text-align:center;
+  }
+
+  .message-card{
+    background:rgba(251,243,231,0.06);
+    border:1px solid rgba(251,243,231,0.14);
+    border-radius:18px;
+    padding:clamp(28px, 6vw, 56px);
+    backdrop-filter:blur(6px);
+  }
+
+  .message-card .quote-mark{
+    font-family:'Fraunces', serif;
+    font-size:3rem;
+    color:var(--coral);
+    line-height:1;
+    margin-bottom:6px;
+  }
+
+  .message-body{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:clamp(1.15rem, 2.6vw, 1.5rem);
+    line-height:1.55;
+    color:var(--cream);
+    margin-bottom:26px;
+  }
+
+  .message-sign{
+    font-family:'Space Mono', monospace;
+    font-size:0.8rem;
+    letter-spacing:0.12em;
+    color:var(--mint);
+    text-transform:uppercase;
+  }
+
+  /* ---------- Reasons strip ---------- */
+  .reasons{
+    position:relative;
+    z-index:1;
+    max-width:900px;
+    margin:0 auto;
+    padding:0 24px 140px;
+  }
+
+  .reasons-title{
+    text-align:center;
+    font-family:'Space Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:40px;
+  }
+
+  .reasons-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:22px;
+  }
+
+  .reason-item{
+    border-left:2px solid var(--coral);
+    padding:6px 0 6px 18px;
+    text-align:left;
+  }
+
+  .reason-item .r-title{
+    font-family:'Fraunces', serif;
+    font-size:1.15rem;
+    margin-bottom:6px;
+    color:var(--cream);
+  }
+
+  .reason-item .r-body{
+    font-size:0.92rem;
+    line-height:1.5;
+    color:rgba(251,243,231,0.72);
+  }
+
+  /* ---------- Footer ---------- */
+  footer{
+    position:relative;
+    z-index:1;
+    text-align:center;
+    padding:40px 20px 60px;
+    font-family:'Space Mono', monospace;
+    font-size:0.7rem;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:rgba(251,243,231,0.4);
+  }
+
+  /* ---------- Confetti burst ---------- */
+  .confetti-piece{
+    position:fixed;
+    top:-10px;
+    width:8px;
+    height:14px;
+    z-index:50;
+    pointer-events:none;
+    opacity:0.95;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform:translateY(110vh) rotate(540deg); opacity:0.3; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; }
+    html{ scroll-behavior:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient" id="ambient"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="eyebrow">A small page, a big wish</div>
+  <h1 class="headline">Happy Birthday<span class="name">Swapssss</span></h1>
+  <p class="subline">
+    One more year of that laugh, that spark, and every small thing that makes you, you.
+    Today's just for celebrating that.
+  </p>
+  <div class="scroll-hint">scroll down ↓</div>
+</section>
+
+<!-- CAKE / SIGNATURE INTERACTION -->
+<section class="cake-section">
+  <div class="cake-label">Make a wish</div>
+  <div class="cake-title">Blow out the candles</div>
+  <div class="cake-hint">tap the cake</div>
+
+  <div id="cakeWrap">
+    <svg viewBox="0 0 300 280" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <!-- plate -->
+      <ellipse cx="150" cy="245" rx="110" ry="14" fill="#5EC8C0" opacity="0.25"/>
+      <!-- cake base -->
+      <rect x="55" y="170" width="190" height="65" rx="10" fill="#FF7A9C"/>
+      <rect x="55" y="170" width="190" height="16" rx="8" fill="#FBF3E7" opacity="0.9"/>
+      <!-- middle layer -->
+      <rect x="75" y="120" width="150" height="55" rx="10" fill="#F4C95D"/>
+      <rect x="75" y="120" width="150" height="14" rx="7" fill="#FBF3E7" opacity="0.9"/>
+      <!-- top layer -->
+      <rect x="100" y="80" width="100" height="45" rx="9" fill="#8FE3D1"/>
+      <rect x="100" y="80" width="100" height="12" rx="6" fill="#FBF3E7" opacity="0.9"/>
+      <!-- candles -->
+      <g id="candle1">
+        <rect x="120" y="50" width="6" height="30" fill="#FBF3E7"/>
+        <g class="flame" transform="translate(123,50)">
+          <path d="M0 0 C 6 -8, 6 -16, 0 -22 C -6 -16, -6 -8, 0 0 Z" fill="#F4C95D"/>
+        </g>
+        <g class="smoke" transform="translate(123,28)">
+          <ellipse cx="0" cy="0" rx="4" ry="7" fill="#FBF3E7"/>
+        </g>
+      </g>
+      <g id="candle2">
+        <rect x="147" y="45" width="6" height="35" fill="#FBF3E7"/>
+        <g class="flame" transform="translate(150,45)">
+          <path d="M0 0 C 6 -8, 6 -16, 0 -22 C -6 -16, -6 -8, 0 0 Z" fill="#FF7A9C"/>
+        </g>
+        <g class="smoke" transform="translate(150,23)">
+          <ellipse cx="0" cy="0" rx="4" ry="7" fill="#FBF3E7"/>
+        </g>
+      </g>
+      <g id="candle3">
+        <rect x="174" y="50" width="6" height="30" fill="#FBF3E7"/>
+        <g class="flame" transform="translate(177,50)">
+          <path d="M0 0 C 6 -8, 6 -16, 0 -22 C -6 -16, -6 -8, 0 0 Z" fill="#8FE3D1"/>
+        </g>
+        <g class="smoke" transform="translate(177,28)">
+          <ellipse cx="0" cy="0" rx="4" ry="7" fill="#FBF3E7"/>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="wish-made" id="wishMade">Wish made. Here's to it coming true. 🎉</div>
+</section>
+
+<!-- MESSAGE -->
+<section class="message-section">
+  <div class="message-card">
+    <div class="quote-mark">“</div>
+    <p class="message-body">
+      Swapssss, another year of you being effortlessly you — and somehow that's
+      still my favorite thing to watch happen. Hope today gives you every reason
+      to smile the way you make everyone around you smile.
+    </p>
+    <div class="message-sign">— Virat</div>
+  </div>
+</section>
+
+<!-- REASONS -->
+<section class="reasons">
+  <div class="reasons-title">A few reasons, out of many</div>
+  <div class="reasons-grid">
+    <div class="reason-item">
+      <div class="r-title">That laugh</div>
+      <div class="r-body">The kind that's loud, unfiltered, and instantly contagious.</div>
+    </div>
+    <div class="reason-item">
+      <div class="r-title">Zero effort, full charm</div>
+      <div class="r-body">You walk into a room and somehow it's just... better.</div>
+    </div>
+    <div class="reason-item">
+      <div class="r-title">The chaos, the calm</div>
+      <div class="r-body">Full drama one minute, wisest person in the room the next.</div>
+    </div>
+    <div class="reason-item">
+      <div class="r-title">That stubborn streak</div>
+      <div class="r-body">You never back down from anything — annoyingly admirable.</div>
+    </div>
+    <div class="reason-item">
+      <div class="r-title">The little things</div>
+      <div class="r-body">The way you remember stuff nobody else bothers to.</div>
+    </div>
+    <div class="reason-item">
+      <div class="r-title">Just... you</div>
+      <div class="r-body">Genuinely can't picture the good days without you in them.</div>
+    </div>
+  </div>
+</section>
+
+<footer>made with care, just for you</footer>
+
+<script>
+  // ---------- Ambient floating dots ----------
+  const ambient = document.getElementById('ambient');
+  const colors = ['#F4C95D','#FF7A9C','#8FE3D1','#FBF3E7'];
+  const dotCount = window.innerWidth < 600 ? 14 : 26;
+  for(let i=0;i<dotCount;i++){
+    const d = document.createElement('div');
+    d.className = 'float-dot';
+    const size = 4 + Math.random()*8;
+    d.style.width = size+'px';
+    d.style.height = size+'px';
+    d.style.left = Math.random()*100+'vw';
+    d.style.top = (100 + Math.random()*20)+'vh';
+    d.style.background = colors[Math.floor(Math.random()*colors.length)];
+    d.style.animationDuration = (14 + Math.random()*12)+'s';
+    d.style.animationDelay = (Math.random()*10)+'s';
+    ambient.appendChild(d);
+  }
+
+  // ---------- Cake interaction ----------
+  const cakeWrap = document.getElementById('cakeWrap');
+  const wishMade = document.getElementById('wishMade');
+  let blownOut = false;
+
+  cakeWrap.addEventListener('click', () => {
+    if(blownOut) return;
+    blownOut = true;
+    document.querySelectorAll('.flame').forEach(f => f.classList.add('out'));
+    document.querySelectorAll('.smoke').forEach(s => s.classList.add('show'));
+    wishMade.classList.add('show');
+    burstConfetti();
+  });
+
+  // ---------- Confetti burst ----------
+  function burstConfetti(){
+    const colors = ['#F4C95D','#FF7A9C','#8FE3D1','#FBF3E7'];
+    for(let i=0;i<70;i++){
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random()*100+'vw';
+      piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+      piece.style.animationDuration = (2.2 + Math.random()*1.8)+'s';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 4200);
+    }
+  }
+</script>
+
+</body>
+</html>
